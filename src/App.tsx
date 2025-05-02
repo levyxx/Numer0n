@@ -1,21 +1,22 @@
 import { useState } from 'react';
 import './App.css';
 
-const API_BASE = ''; // 相対URL（Cloudflare Pages）や、開発環境に合わせて設定
+const API_BASE = '';
 
 function App() {
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [guess, setGuess] = useState('');
   const [results, setResults] = useState<{ guess: string, eat: number, bite: number }[]>([]);
-  const [error, setError] = useState<string | null>(null); // エラーメッセージ用の state
+  const [error, setError] = useState<string | null>(null);
 
   const startGame = async () => {
     try {
       const res = await fetch(`${API_BASE}/start`, { method: 'POST' });
       if (!res.ok) throw new Error('Failed to start the game');
-      const data = await res.json() as { session_id: string }; // 型アサーションを追加
+      const data = await res.json() as { session_id: string };
       setSessionId(data.session_id);
       setResults([]);
+      setGuess('');
       setError(null);
     } catch (err) {
       setError('ゲームの開始に失敗しました');
@@ -23,8 +24,18 @@ function App() {
     }
   };
 
+  const isValidGuess = (input: string): boolean => {
+    return /^[0-9]{3}$/.test(input) && new Set(input).size === 3;
+  };
+
   const makeGuess = async () => {
-    if (!sessionId || guess.length !== 3) return;
+    if (!sessionId) return;
+
+    if (!isValidGuess(guess)) {
+      setError('推測は3桁の数字で、すべて異なる数字で入力してください');
+      return;
+    }
+
     try {
       const res = await fetch(`${API_BASE}/guess?session_id=${sessionId}`, {
         method: 'POST',
@@ -32,7 +43,7 @@ function App() {
         body: JSON.stringify({ guess })
       });
       if (!res.ok) throw new Error('Failed to submit the guess');
-      const data = await res.json() as { guess: string; eat: number; bite: number }; // 型アサーションを追加
+      const data = await res.json() as { guess: string; eat: number; bite: number };
       setResults([...results, data]);
       setGuess('');
       setError(null);
@@ -52,12 +63,13 @@ function App() {
             value={guess}
             onChange={e => setGuess(e.target.value)}
             maxLength={3}
-            disabled={guess.length === 3} // 3文字入力したら入力を無効にする
           />
-          <button onClick={makeGuess} disabled={guess.length !== 3}>推測</button>
+          <button onClick={makeGuess} disabled={!isValidGuess(guess)}>
+            推測
+          </button>
         </div>
       )}
-      {error && <p style={{ color: 'red' }}>{error}</p>} {/* エラーメッセージの表示 */}
+      {error && <p style={{ color: 'red' }}>{error}</p>}
       <ul>
         {results.map((r, i) => (
           <li key={i}>
