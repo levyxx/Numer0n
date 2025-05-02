@@ -56,7 +56,10 @@ function App() {
   return (
     <div className="App">
       <h1>Numer0n</h1>
-      <button onClick={startGame}>
+      <button
+        onClick={startGame}
+        className={sessionId ? 'restart' : ''}
+      >
         {sessionId ? 'Restart' : 'Game start'}
       </button>
       {sessionId && (
