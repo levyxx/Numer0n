@@ -5,7 +5,7 @@ type Env = {
 export const onRequestPost: PagesFunction<Env> = async (context) => {
 const secret = generateSecret();
 const sessionId = crypto.randomUUID();
-const kv = context.env.GAME_KV as KVNamespace;
+const kv = context.env.GAME_KV;
 await kv.put(sessionId, secret, { expirationTtl: 3600 });
 return new Response(JSON.stringify({ session_id: sessionId }), {
     headers: { 'Content-Type': 'application/json' },
