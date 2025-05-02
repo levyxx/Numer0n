@@ -1,0 +1,23 @@
+{
+  "name": "numer0n",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/levyxx/Numer0n.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/levyxx/Numer0n/issues"
+  },
+  "homepage": "https://github.com/levyxx/Numer0n#readme",
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250430.0"
+  }
+}
