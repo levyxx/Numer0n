@@ -55,8 +55,10 @@ function App() {
 
   return (
     <div className="App">
-      <h1>ヌメロン</h1>
-      <button onClick={startGame}>ゲーム開始</button>
+      <h1>Numer0n</h1>
+      <button onClick={startGame}>
+        {sessionId ? 'Restart' : 'Game start'}
+      </button>
       {sessionId && (
         <div>
           <input
@@ -65,7 +67,7 @@ function App() {
             maxLength={3}
           />
           <button onClick={makeGuess} disabled={!isValidGuess(guess)}>
-            推測
+            Guess!
           </button>
         </div>
       )}
