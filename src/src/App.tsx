@@ -13,10 +13,10 @@ function App() {
     try {
       const res = await fetch(`${API_BASE}/start`, { method: 'POST' });
       if (!res.ok) throw new Error('Failed to start the game');
-      const data = await res.json();
+      const data = await res.json() as { session_id: string }; // 型アサーションを追加
       setSessionId(data.session_id);
       setResults([]);
-      setError(null); // エラーをリセット
+      setError(null);
     } catch (err) {
       setError('ゲームの開始に失敗しました');
       console.error(err);
@@ -32,10 +32,10 @@ function App() {
         body: JSON.stringify({ guess })
       });
       if (!res.ok) throw new Error('Failed to submit the guess');
-      const data = await res.json();
+      const data = await res.json() as { guess: string; eat: number; bite: number }; // 型アサーションを追加
       setResults([...results, data]);
       setGuess('');
-      setError(null); // エラーをリセット
+      setError(null);
     } catch (err) {
       setError('推測の送信に失敗しました');
       console.error(err);
