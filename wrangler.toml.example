@@ -16,5 +16,5 @@ name = "cloudflare-pages-functions"
 
 [[kv_namespaces]]
 binding = "GAME_KV"
-id = "56ead805eaa944f8bcee56c2bec1a809"   # 開発環境用のID (Dev)
-preview_id = "ec463fbcc8cd4eb3b6bec41be1ece334" # preview 用 (wrangler dev 用)
+id = "your_kv_namespace_id"   # 開発環境用のID (Dev)
+preview_id = "your_preview_id" # preview 用 (wrangler dev 用)
