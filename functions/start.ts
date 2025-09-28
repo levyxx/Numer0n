@@ -18,10 +18,10 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
 };
 
 function generateSecret(): string {
-const digits = Array.from({ length: 10 }, (_, i) => i);
-for (let i = digits.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [digits[i], digits[j]] = [digits[j], digits[i]];
-}
-return digits.slice(0, 3).join('');
+    const digits = Array.from({ length: 10 }, (_, i) => i);
+    for (let i = digits.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [digits[i], digits[j]] = [digits[j], digits[i]];
+    }
+    return digits.slice(0, 3).join('');
 }
