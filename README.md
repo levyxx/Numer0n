@@ -1,54 +1,99 @@
-# React + TypeScript + Vite
+# Numer0n
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+3桁の数字を推測するゲーム「ヌメロン」のWebアプリケーションです。
 
-Currently, two official plugins are available:
+## ゲームルール
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- コンピュータが3桁の数字（各桁は異なる数字）を生成します
+- プレイヤーは3桁の数字を推測して入力します
+- 結果として以下が表示されます：
+  - **EAT**: 数字と位置が両方とも正しい桁数
+  - **BITE**: 数字は正しいが位置が間違っている桁数
 
-## Expanding the ESLint configuration
+## 技術スタック
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **フロントエンド**: React + TypeScript + Vite
+- **バックエンド**: Cloudflare Pages Functions
+- **データストレージ**: Cloudflare KV
+- **開発環境**: ESLint
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## セットアップ
+
+### 前提条件
+- Node.js (推奨: 18.x以上)
+- npm
+- Cloudflareアカウント
+
+### インストール
+
+1. リポジトリをクローン
+```bash
+git clone <repository-url>
+cd Numer0n
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+2. 依存関係をインストール
+```bash
+npm install
+```
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+3. Cloudflare KV設定
+```bash
+# wrangler.toml.exampleをwrangler.tomlにコピー
+cp wrangler.toml.example wrangler.toml
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+# KV namespaceを作成
+wrangler kv:namespace create GAME_KV
+wrangler kv:namespace create GAME_KV --preview
+
+# 生成されたIDをwrangler.tomlに設定
+```
+
+### 開発環境での起動
+
+```bash
+# フロントエンドの開発サーバー起動
+npm run dev
+
+# Cloudflare Pages Functionsをローカルで実行
+wrangler pages dev dist --kv GAME_KV
+```
+
+### ビルドとデプロイ
+
+```bash
+# ビルド
+npm run build
+
+# Cloudflare Pagesにデプロイ
+wrangler pages deploy dist
+```
+
+## プロジェクト構造
+
+```
+Numer0n/
+├── src/                    # Reactアプリケーション
+│   ├── App.tsx            # メインコンポーネント
+│   └── ...
+├── functions/             # Cloudflare Pages Functions
+│   ├── start.ts          # ゲーム開始API
+│   └── guess.ts          # 推測API
+├── public/               # 静的ファイル
+├── package.json          # 依存関係とスクリプト
+├── vite.config.ts        # Viteの設定
+├── wrangler.toml         # Cloudflareの設定
+└── tsconfig.json         # TypeScriptの設定
+```
+
+## 開発
+
+### Linting
+```bash
+npm run lint
+```
+
+### プレビュー
+```bash
+npm run preview
 ```
